@@ -16,7 +16,16 @@ const load = async (path, res, endWithText) => {
     } else {
         type = 'application/json; charset=utf-8';
     }
-    const data = await readFile(path, 'utf8');
+    const data = await new Promise((resolve, reject)=> {
+        readFile(path, 'utf8',(err, data)=> {
+            if (err) {
+                reject(err);
+            } else {
+                resolve(data);
+            }
+        });
+    })
+    console.log("read " + data);
     endWithText(res, data, 200, {'Content-Type': type});
 };
 

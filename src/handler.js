@@ -1,7 +1,8 @@
 
 
 class Handler {
-    constructor() {
+    constructor(preTest) {
+        this.preTest = preTest;
         this.handler = [];
         this.registerHandler = this.registerHandler.bind(this);
         this.handle = this.handle.bind(this);
@@ -12,14 +13,20 @@ class Handler {
         this.handler.push({ regex, proccessor });
     }
 
-    handle (context) {
-        const { req } = context;
-        const { url } = req;
+    async handle(context) {
+        const {req} = context;
+        const {url} = req;
+        console.log(url);
+        if (this.preTest && !url.match(this.preTest)) {
+            console.log("pre fail " + this.preTest)
+            return false;
+        }
         for (let i = 0; i < this.handler.length; i++) {
             let obj = this.handler[i];
             let match;
-            if (match = url.match(obj.regex) && obj.proccessor(match, context)) {
-                return true;
+            if (match = url.match(obj.regex)) {
+                console.log("match" + obj.regex);
+                return await obj.proccessor(match, context);
             }
         }
         return false;

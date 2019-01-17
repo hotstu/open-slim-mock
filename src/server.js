@@ -1,5 +1,5 @@
 const http = require('http');
-
+require("colors");
 const commonHeaders = {
     'Powered-By': 'openSlimMock@hglf',
     'Content-Type': 'application/json; charset=utf-8',
@@ -9,20 +9,24 @@ const commonHeaders = {
     "Access-Control-Allow-Headers": "Content-Type, Access-Control-Allow-Headers, Authorization, X-Requested-With"
 };
 
+const fallbackRouter = require("./router/router.fallback");
+
 class SlimServer {
     constructor(config = {}) {
         this.config = Object.assign({
             "PORT": 8082,
             "HOST": `0.0.0.0`,
             "dumpPost": true,
-            "router": "./router/router.fallback"
         }, config);
-        this.handler = require(this.config.router);
         this.endWithText = this.endWithText.bind(this);
         this.writeHead = this.writeHead.bind(this);
         this.filter = this.filter.bind(this);
         this.dumpBody = this.dumpBody.bind(this);
         this.start = this.start.bind(this);
+    }
+
+    setRouter(router) {
+        this.router = router
     }
 
 
@@ -35,7 +39,7 @@ class SlimServer {
         res.writeHead(statusCode, Object.assign({}, commonHeaders));
     };
 
-    filter(req, res){
+    async filter(req, res) {
         /**
          * 封装上下文
          */
@@ -46,8 +50,15 @@ class SlimServer {
             endWithText: this.endWithText,
             writeHead: this.writeHead
         };
-
-        return this.handler.handle(context);
+        if (this.router) {
+            for (let i = 0; i < this.router.length; i++) {
+                let temp = this.router[i];
+                if (temp && await temp.handle(context)) {
+                    return true;
+                }
+            }
+        }
+        return fallbackRouter.handle(context);
 
     }
 
@@ -65,11 +76,9 @@ class SlimServer {
     }
 
     start() {
-        http.createServer((req, res) => {
-            const {method, url, headers} = req;
+        http.createServer(async (req, res) => {
+            const {method, url} = req;
             console.log(method.green, url);
-            console.log(headers);
-
 
             if (method === "OPTIONS") {
                 this.writeHead(res, 200);
@@ -81,7 +90,7 @@ class SlimServer {
                 this.dumpBody(req);
             }
 
-            if (!this.filter(req, res)) {
+            if (!await this.filter(req, res)) {
                 this.endWithText(res, '{"success": false,"errMsg": "page not found"}', 404)
             }
 
