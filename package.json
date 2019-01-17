@@ -1,0 +1,22 @@
+{
+  "name": "open-slim-mock",
+  "version": "1.0.0",
+  "description": "node server",
+  "main": "index.js",
+  "scripts": {
+    "test": "node index.js",
+    "proxy": "node proxy.js"
+  },
+  "keywords": [
+    "mock"
+  ],
+  "author": "hgleifeng@foxmail.com",
+  "license": "ISC",
+  "dependencies": {
+    "colors": "^1.1.2",
+    "mime-types": "^2.1.18",
+    "node-static": "^0.7.10",
+    "request": "^2.85.0",
+    "ws": "^3.1.0"
+  }
+}

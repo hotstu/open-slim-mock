@@ -1,0 +1,14 @@
+{
+    "server": {
+        "port" : 8082,
+        "dumpPost" : true,
+        "router" : "router.app.js"
+    },
+    "proxy": {
+        "port" : 8080,
+        "dumpPost": true,
+        "dumpResponse": true,
+        "injectRespHeader": true,
+        "dstHost": "http://192.168.28.112:8080"
+    }
+}
