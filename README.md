@@ -1,10 +1,14 @@
-# open-slim-mock(under constructing...)
+# open-slim-mock
 
 
 
 ## 基于nodejs的用于开发调试的服务端程序
 
 开发人员在调试app的时候可以启动本地环境的服务器，而不用后端人员协助，便于前后端分离
+
+## 背景
+
+在公司app开发项目中，为了和不同水平的后端开发人员分工合，我在业余时间用nodejs编写了一个http服务，用于将测试数据运行在本地的web服务中用于app测试，设计思想是小而精，使用txt文档作为数据源，可以随时添加新接口，经过一年的使用，证实提高了我们的开发效率。现在代码经过完全重构开源出来。
 
 ## 特色
 
@@ -25,14 +29,22 @@
   * stringProcessor.js 直接输出字符串
   
   3. ### 反向代理
-   
+   使用nodejs的stream实现
 
 ## 应用
 
- 启动本地测试环境
+1. clone 项目
+1. 编辑serverconfig.json
+2. 仿照SampleApp创建自己的路由，通常一个接口一个路由
+3.启动本地测试环境
 - `npm run test` 或者 `yarn test`
 
 
+
+# more
+|Github|简书| 掘金|JCenter | dockerHub|
+| -------------| ------------- |------------- |------------- |------------- |
+| [Github](https://github.com/hotstu)| [简书](https://www.jianshu.com/u/ca2207af2001) | [掘金](https://juejin.im/user/5bee320651882516be2ebbfe) |[JCenter ](https://bintray.com/hglf/maven)      | [dockerHub](https://hub.docker.com/u/hglf)|
 
 
 
