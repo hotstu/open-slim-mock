@@ -1,7 +1,8 @@
 {
   "server": {
     "config": {
-      "port": 8082,
+      "PORT": 8082,
+      "HOST": "127.0.0.1",
       "dumpPost": true
     },
     "router": [

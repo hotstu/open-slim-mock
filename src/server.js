@@ -58,7 +58,7 @@ class SlimServer {
                 }
             }
         }
-        return fallbackRouter.handle(context);
+        return await fallbackRouter.handle(context);
 
     }
 
@@ -78,8 +78,15 @@ class SlimServer {
     start() {
         http.createServer(async (req, res) => {
             const {method, url} = req;
-            console.log(method.green, url);
-
+            const start = new Date().getTime();
+            console.log(method.green, `${url} start`);
+            res.on("close", () => {
+                console.log('close');
+            });
+            res.on('finish', function () {
+                const cost = new Date().getTime() - start;
+                console.log(method.green, `${url} finish in ${cost} ms`);
+            });
             if (method === "OPTIONS") {
                 this.writeHead(res, 200);
                 res.end();

@@ -18,7 +18,6 @@ class Handler {
         const {url} = req;
         console.log(url);
         if (this.preTest && !url.match(this.preTest)) {
-            console.log("pre fail " + this.preTest)
             return false;
         }
         for (let i = 0; i < this.handler.length; i++) {
@@ -26,7 +25,8 @@ class Handler {
             let match;
             if (match = url.match(obj.regex)) {
                 console.log("match" + obj.regex);
-                return await obj.proccessor(match, context);
+                await obj.proccessor(match, context);
+                return true;
             }
         }
         return false;
