@@ -13,9 +13,7 @@
 ## 特色
 
   1. ### 架构
-  基于nodejs 标准库的http模块，没有采用其他笨重的web框架，更底层，更灵活
-  路由模仿Django，采用正则表达式分发请求到各个router再分发到各个Processor进行处理
-  使用者可以在router中注册自己需要的processor，对各个不同的请求进行处理
+  基于nodejs 标准库的http模块，没有采用其他笨重的web框架，更底层，更灵活。路由模仿Django，采用正则表达式分发请求到各个router再分发到各个Processor进行处理。使用者可以在router中注册自己需要的processor，对各个不同的请求进行处理，例如你要显示一个json，可以直接使用jsonProcessor，将josn的内容作为参数传入，也可以使用fileProcessor，将写有json字符串的文本地址，作为参数传入。
   
   2. ### 扩展性
   Processor是一个lamda表达式，使用者可以使用现有的Processor或者自己实现Processor，无限扩展
@@ -55,3 +53,5 @@
  - [ ] a manage panel user interface
  - [ ] websocket based control of server from manage panel
  - [ ] support api snapshot and save to local
+ - [ ] database datasource support
+
