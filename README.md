@@ -26,7 +26,7 @@
   *  proxyProcessor.js 反向代理远程服务器
   *  staticDirectoryProcessor.js 处理静态文件目录
   *  staticFileProcessor.js 处理单个静态文件
-  * stringProcessor.js 直接输出字符串
+  *  stringProcessor.js 直接输出字符串
   
   3. ### 反向代理
    使用nodejs的stream实现
@@ -34,9 +34,9 @@
 ## 应用
 
 1. clone 项目
-1. 编辑serverconfig.json
 2. 仿照SampleApp创建自己的路由，通常一个接口一个路由
-3. 启动本地测试环境
+3. 编辑serverconfig.json，注册自己的路由
+4. 启动本地测试环境
 - `npm run test` 或者 `yarn test`
 
 
