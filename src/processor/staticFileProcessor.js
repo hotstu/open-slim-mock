@@ -15,7 +15,7 @@ const staticHandler = (localPath) => {
             });
             eventEmitter.addListener("error", (e) => {
                 console.error(e);
-                endWithText(res, '{"status":"error","msg": "file not found"}', 404);
+                endWithText('{"status":"error","msg": "file not found"}', 404);
                 resolve(false);
             })
         })

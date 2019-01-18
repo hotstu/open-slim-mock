@@ -1,10 +1,9 @@
 
-/** 
+/**
  * 对服务器进行反向代理，修改header实现跨域访问，便于在浏览器上调试
  * @author hgleifeng@foxmail.com
  * @since 2018.3.19
-*/
-const http = require('http');
+ */
 const colors = require('colors');
 const urlParser = require('url');
 const mime = require('mime-types')
@@ -41,7 +40,7 @@ const server = http.createServer(function (req, res) {
                 Object.assign(remoteResp.headers, looseHeader);
             }
             const contentType = remoteResp.headers['content-type'];
-            if( dumpResponse && contentType 
+            if( dumpResponse && contentType
                 && (contentType.indexOf("text") != -1 || contentType.indexOf("json") != -1)) {
                 dumpdata(remoteResp)
             } else {

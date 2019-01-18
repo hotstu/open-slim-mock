@@ -32,7 +32,7 @@ const load = async (path, res, endWithText) => {
             }
         });
     })
-    endWithText(res, data, 200, {'Content-Type': type});
+    endWithText(data, 200, {'Content-Type': type});
 };
 
 module.exports = Processor;

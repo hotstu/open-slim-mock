@@ -30,13 +30,19 @@ class SlimServer {
     }
 
 
-    endWithText(res, content, statusCode = 200, customHeaders = {}) {
-        res.writeHead(statusCode, Object.assign({}, commonHeaders, customHeaders));
-        console.log(content);
-        res.end(content)
+    endWithText(res) {
+        return (content, statusCode = 200, customHeaders = {}) => {
+            res.writeHead(statusCode, Object.assign({}, commonHeaders, customHeaders));
+            //console.log(content);
+            res.end(content)
+        }
+
     };
-    writeHead(res, statusCode = 200) {
-        res.writeHead(statusCode, Object.assign({}, commonHeaders));
+
+    writeHead(res) {
+        return (statusCode = 200,customHeaders = {}) => {
+            res.writeHead(statusCode, Object.assign({}, commonHeaders, customHeaders));
+        }
     };
 
     async filter(req, res) {
@@ -47,8 +53,8 @@ class SlimServer {
             config: this.config,
             req: req,
             res: res,
-            endWithText: this.endWithText,
-            writeHead: this.writeHead
+            endWithText: this.endWithText(res),
+            writeHead: this.writeHead(res)
         };
         if (this.router) {
             for (let i = 0; i < this.router.length; i++) {
@@ -63,7 +69,7 @@ class SlimServer {
     }
 
 
-    dumpBody(req)  {
+    dumpBody(req) {
         let body = [];
         req.on('error', (err) => {
             console.error(err);

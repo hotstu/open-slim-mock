@@ -17,14 +17,14 @@ const staticHandler = (root) => {
                 staticHost.serve(req, res, (err, data) => {
                     if (err) {
                         console.error(err);
-                        endWithText(res, '{"status":"error","msg": "file not found"}', 404);
+                        endWithText('{"status":"error","msg": "file not found"}', 404);
                         res.end();
                         resolve(false);
                     }
                     resolve(true);
                 });
             } else {
-                endWithText(res, '{"status":"error","msg": "file not found"}', 404);
+                endWithText('{"status":"error","msg": "file not found"}', 404);
                 resolve(false);
 
             }
