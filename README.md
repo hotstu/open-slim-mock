@@ -39,7 +39,7 @@
  TODO
  
  - [x] better router loader 
- - [ ] load config from json
+ - [x] load config from json
  - [ ] a manage panel user interface
  - [ ] websocket based control of server from manage panel
  - [ ] support api snapshot and save to local

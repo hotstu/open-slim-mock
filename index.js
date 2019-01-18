@@ -1,5 +1,6 @@
-const Server = require("./src/server")
-const config = require("./serverconfig");
+const Server = require("./src/server");
+const config = require("./src/configLoader");
+
 console.log(config.server.router);
 
 const myServer = new Server(config.server.config);

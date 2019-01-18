@@ -6,7 +6,8 @@
       "dumpPost": true
     },
     "router": [
-      "./sampleApp/router.sampleApp.js"
+      "./sampleApp/router.sampleApp.js",
+      "./sampleApp/router.sampleProxy.js"
     ]
   },
   "proxy": {
@@ -14,6 +15,6 @@
     "dumpPost": true,
     "dumpResponse": true,
     "injectRespHeader": true,
-    "dstHost": "http://192.168.28.112:8080"
+    "dstHost": "http://httpbin.org"
   }
 }

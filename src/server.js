@@ -21,8 +21,9 @@ class SlimServer {
         this.endWithText = this.endWithText.bind(this);
         this.writeHead = this.writeHead.bind(this);
         this.filter = this.filter.bind(this);
-        this.dumpBody = this.dumpBody.bind(this);
+        this.dumpStream = this.dumpStream.bind(this);
         this.start = this.start.bind(this);
+        this.injectHeader = this.injectHeader.bind(this);
     }
 
     setRouter(router) {
@@ -32,7 +33,7 @@ class SlimServer {
 
     endWithText(res) {
         return (content, statusCode = 200, customHeaders = {}) => {
-            res.writeHead(statusCode, Object.assign({}, commonHeaders, customHeaders));
+            res.writeHead(statusCode, this.injectHeader({}, customHeaders));
             //console.log(content);
             res.end(content)
         }
@@ -41,9 +42,13 @@ class SlimServer {
 
     writeHead(res) {
         return (statusCode = 200,customHeaders = {}) => {
-            res.writeHead(statusCode, Object.assign({}, commonHeaders, customHeaders));
+            res.writeHead(statusCode,this.injectHeader({}, customHeaders));
         }
     };
+
+    injectHeader(origin, customHeaders = {}) {
+        return Object.assign(origin, commonHeaders, customHeaders);
+    }
 
     async filter(req, res) {
         /**
@@ -54,7 +59,9 @@ class SlimServer {
             req: req,
             res: res,
             endWithText: this.endWithText(res),
-            writeHead: this.writeHead(res)
+            writeHead: this.writeHead(res),
+            dumpStream: this.dumpStream,
+            injectHeader: this.injectHeader
         };
         if (this.router) {
             for (let i = 0; i < this.router.length; i++) {
@@ -69,9 +76,9 @@ class SlimServer {
     }
 
 
-    dumpBody(req) {
+    dumpStream(stream) {
         let body = [];
-        req.on('error', (err) => {
+        stream.on('error', (err) => {
             console.error(err);
         }).on('data', (chunk) => {
             body.push(chunk);
@@ -100,7 +107,7 @@ class SlimServer {
             }
 
             if (method === "POST" && this.config.dumpPost) {
-                this.dumpBody(req);
+                this.dumpStream(req);
             }
 
             if (!await this.filter(req, res)) {
