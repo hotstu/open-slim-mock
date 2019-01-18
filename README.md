@@ -36,7 +36,7 @@
 1. clone 项目
 1. 编辑serverconfig.json
 2. 仿照SampleApp创建自己的路由，通常一个接口一个路由
-3.启动本地测试环境
+3. 启动本地测试环境
 - `npm run test` 或者 `yarn test`
 
 
