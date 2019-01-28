@@ -5,13 +5,13 @@
  * @returns {Function}
  * @constructor
  */
-const Processor = (func, latency) => async (match, req, res) => {
+const Processor = (func, latency) => async (match, context) => {
     await new Promise((resolve) => {
         setTimeout(() => {
             resolve();
-        }, typeof latency === "number"? latency: latency(match, req, res));
+        }, typeof latency === "number"? latency: latency(match, context));
     });
-    await func(match, req, res);
+    await func(match, context);
 };
 
 module.exports = Processor;
