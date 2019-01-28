@@ -54,4 +54,5 @@
  - [ ] websocket based control of server from manage panel
  - [ ] support api snapshot and save to local
  - [ ] database datasource support
+ - [ ] handle memory leak when processor promise is not resolve & reject
 

@@ -7,6 +7,7 @@ const binaryFileProcessor = require("../src/processor/staticFileProcessor");
 const jsonProcessor = require("../src/processor/jsonProcessor");
 const latencyProcessor = require("../src/processor/latencyProcessor");
 const stringProcessor = require("../src/processor/stringProcessor");
+const directoryProcessor = require("../src/processor/directoryProcessor")(path.resolve(__dirname, 'dataSource'));
 
 const sampleApp = new Handler(/^\/sample\/([\s|\S]*)/);
 //测试文件做数据源输出
@@ -33,4 +34,5 @@ sampleApp.registerHandler(/\/sample\/6/, latencyProcessor(jsonProcessor({
 //测试静态文件
 sampleApp.registerHandler(/\/sample\/7\/([\s|\S]*)/, binaryProcessor);
 sampleApp.registerHandler(/\/sample\/8/, binaryFileProcessor('sampleApp/static/3.webp'));
+sampleApp.registerHandler(/\/sample\/9/, directoryProcessor('sample.json'));
 module.exports = sampleApp;
