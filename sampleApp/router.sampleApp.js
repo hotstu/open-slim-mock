@@ -6,7 +6,8 @@ const binaryFileProcessor = require("../src/processor/staticFileProcessor");
 
 const jsonProcessor = require("../src/processor/jsonProcessor");
 const latencyProcessor = require("../src/processor/latencyProcessor");
-const stringProcessor = require("../src/processor/stringProcessor");
+const dumpPostProcessor = require("../src/processor/stringProcessor");
+const stringProcessor = require("../src/processor/dumpPostProcessor");
 const directoryProcessor = require("../src/processor/directoryProcessor")(path.resolve(__dirname, 'dataSource'));
 
 const sampleApp = new Handler(/^\/sample\/([\s|\S]*)/);
@@ -25,12 +26,12 @@ sampleApp.registerHandler(/\/sample\/5/, latencyProcessor(jsonProcessor({
     msg: "hello, world",
     from: "json processor",
     latency: 3000
-}),3000));
-sampleApp.registerHandler(/\/sample\/6/, latencyProcessor(jsonProcessor({
+}), 3000));
+sampleApp.registerHandler(/\/sample\/6/, dumpPostProcessor(latencyProcessor(jsonProcessor({
     msg: "hello, world",
     from: "json processor",
     latency: "random in 5000"
-}),()=> Math.random()*5000));
+}), () => Math.random() * 5000)));
 //测试静态文件
 sampleApp.registerHandler(/\/sample\/7\/([\s|\S]*)/, binaryProcessor);
 sampleApp.registerHandler(/\/sample\/8/, binaryFileProcessor('sampleApp/static/3.webp'));
