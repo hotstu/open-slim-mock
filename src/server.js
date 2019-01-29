@@ -106,10 +106,6 @@ class SlimServer {
                 return;
             }
 
-            if (method === "POST" && this.config.dumpPost) {
-                this.dumpStream(req);
-            }
-
             if (!await this.filter(req, res)) {
                 this.endWithText(res, '{"success": false,"errMsg": "content not found"}', 404)
             }

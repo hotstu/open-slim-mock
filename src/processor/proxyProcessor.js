@@ -9,15 +9,15 @@ require('colors');
 
 const proxy = ({
                    dstHost,//代理的host
-                   dumpPost = true,//是否打印post内容
-                   dumpResponse = true,//是否打印response body
+                   dumpPost = false,//是否打印post内容
+                   dumpResponse = false,//是否打印response body
                    injectRespHeader = true//是否在响应头添加允许跨域字段
                }) => (match, {req, res, endWithText, dumpStream, injectHeader}) => {
     const {method, url} = req;
     console.log(match, url);
     return new Promise((resolve, reject) => {
         if (method === "GET" || method === "POST") {
-            const remote = request(dstHost + url);
+            const remote = request(`${dstHost}${url}`);
             remote.on("response", (remoteResp) => {
                 if (injectRespHeader) {
                     injectHeader(remoteResp.headers, {});
