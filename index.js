@@ -1,3 +1,5 @@
+#!/usr/bin/env node
+
 const Server = require("./src/server");
 const config = require("./src/configLoader");
 
