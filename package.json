@@ -1,11 +1,10 @@
 {
   "name": "open-slim-mock",
-  "version": "1.0.0",
+  "version": "1.1.0-alpha",
   "description": "node server",
   "main": "index.js",
   "scripts": {
-    "test": "node index.js",
-    "proxy": "node proxy.js"
+    "test": "node index.js"
   },
   "keywords": [
     "mock"

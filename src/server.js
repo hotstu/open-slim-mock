@@ -111,7 +111,7 @@ class SlimServer {
             }
 
         }).listen(this.config.PORT, this.config.HOST);
-        console.log(`listening at ${this.config.HOST}:${this.config.PORT}`)
+        console.log(`open-slim-mock server listening at ${this.config.HOST}:${this.config.PORT}, only use in test purpose`)
 
 
     }

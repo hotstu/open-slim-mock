@@ -1,7 +1,7 @@
 /**
  * 模拟网络延时
  * @param func
- * @param latency
+ * @param latency 可以是一个固定数值或者一个随机数生成函数
  * @returns {Function}
  * @constructor
  */
