@@ -9,23 +9,26 @@ class Handler {
     }
 
 
-    registerHandler (regex, proccessor){
-        this.handler.push({ regex, proccessor });
+    registerHandler (regex, processor){
+        this.handler.push({ regex, processor });
     }
 
     async handle(context) {
         const {req} = context;
         const {url} = req;
-        console.log(url);
+        //console.log(url);
+        if (this.preTest && (typeof this.preTest) === "function" && !this.preTest(req)) {
+            return false;
+        }
         if (this.preTest && !url.match(this.preTest)) {
             return false;
         }
         for (let i = 0; i < this.handler.length; i++) {
-            let obj = this.handler[i];
+            const {regex, processor} = this.handler[i];
             let match;
-            if (match = url.match(obj.regex)) {
-                console.log("match" + obj.regex);
-                await obj.proccessor(match, context);
+            if (match = url.match(regex)) {
+                //console.log("match" + regex);
+                await processor(match, context);
                 return true;
             }
         }
