@@ -7,7 +7,7 @@
     },
     "router": [
       "./sampleApp/router.sampleApp.js",
-      "./sampleApp/router.sampleProxy.js"
+      "./sampleApp/router.sampleDRR.js"
     ]
   },
   "proxy": {

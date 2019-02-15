@@ -39,6 +39,9 @@
 4. 启动本地测试环境
 - `npm run test` 或者 `yarn test`
 
+## changelog
+ * 1.0.0 重构开源
+
 
 
 # more

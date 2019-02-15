@@ -18,7 +18,7 @@ class SlimServer {
             "HOST": `0.0.0.0`,
             "dumpPost": true,
         }, config);
-        this.endWithText = this.endWithText.bind(this);
+        this.endWithBuffer = this.endWithBuffer.bind(this);
         this.writeHead = this.writeHead.bind(this);
         this.filter = this.filter.bind(this);
         this.dumpStream = this.dumpStream.bind(this);
@@ -31,7 +31,7 @@ class SlimServer {
     }
 
 
-    endWithText(res) {
+    endWithBuffer(res) {
         return (content, statusCode = 200, customHeaders = {}) => {
             res.writeHead(statusCode, this.injectHeader({}, customHeaders));
             //console.log(content);
@@ -58,7 +58,8 @@ class SlimServer {
             config: this.config,
             req: req,
             res: res,
-            endWithText: this.endWithText(res),
+            endWithText: this.endWithBuffer(res),
+            endWithBuffer: this.endWithBuffer(res),
             writeHead: this.writeHead(res),
             dumpStream: this.dumpStream,
             injectHeader: this.injectHeader

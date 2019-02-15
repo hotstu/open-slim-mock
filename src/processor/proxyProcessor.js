@@ -22,13 +22,16 @@ const proxy = ({
                 if (injectRespHeader) {
                     injectHeader(remoteResp.headers, {});
                 }
-                const contentType = remoteResp.headers['content-type'];
-                if (dumpResponse && contentType
-                    && (contentType.indexOf("text") !== -1 || contentType.indexOf("json") !== -1)) {
-                    dumpStream(remoteResp)
-                } else {
-                    console.log("data--> ".bgYellow + "[binary data]");
+                if(dumpResponse) {
+                    const contentType = remoteResp.headers['content-type'];
+                    console.log(contentType);
+                    if (contentType && (contentType.indexOf("text") !== -1 || contentType.indexOf("json") !== -1)) {
+                        dumpStream(remoteResp)
+                    } else {
+                        console.log("data--> ".bgYellow + "[binary data]");
+                    }
                 }
+
             });
             let handleErr1 = handleErr(resolve, endWithText);
             req.on('error', handleErr1);
