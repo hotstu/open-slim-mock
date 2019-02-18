@@ -4,12 +4,19 @@
 
 const Handler = require("../src/handler");
 const proxy = require("../src/processor/proxyProcessor");
-
+const {checksumBuffer} = require("../src/util/hash");
 
 const sampleApp = new Handler(/([\s|\S]*)/);
 const myProxy = proxy({
     dstHost: "http://httpbin.org"
 });
+const path = require("path");
+
+const fs = require("fs");
+const {Serializer, Deserializer} = require("../src/util/buffer");
+const mySerializer = Serializer();
+const myDeserializer = Deserializer();
+
 const MemoryCache = () => {
     let cache = {};
     return {
@@ -29,14 +36,51 @@ const MemoryCache = () => {
         clear: () => {
             cache = {}
         },
-        dump: () => {
-            //TODO save to file
-            console.log("saving...");
+        snapshot: () => {
+            return Object.assign({}, cache);
         }
     }
 };
 
-const myCache = MemoryCache();
+const DiskCache = (destination) => {
+    let cache = {};
+    //TODO init
+    return {
+        save: async (key, {code, headers, body}) => {
+            const buff = mySerializer(code, headers, body);
+            const sum = await checksumBuffer("md5", buff);
+            let tempPath = path.resolve(destination, `${sum}.osm`);
+            if (!fs.existsSync(tempPath)) {
+                fs.writeFileSync(tempPath, buff);
+            }
+            console.log(sum);
+            cache[key] = sum;
+        },
+        find: (key) => {
+            const sum =  cache[key];
+            const tempPath = path.resolve(destination, `${sum}.osm`);
+            const buff = fs.readFileSync(tempPath);
+            return myDeserializer(buff);
+        },
+
+        contains: (key) => {
+            return cache.hasOwnProperty(key);
+        },
+        remove: (key) => {
+            //TODO delete file
+            delete cache[key];
+        },
+        clear: () => {
+            cache = {}
+        },
+        snapshot: () => {
+
+        }
+    }
+};
+
+//const myCache = MemoryCache();
+const myCache = DiskCache(path.resolve(__dirname, 'dump'));
 
 const queryRecorder = (next) => async (match, context) => {
     const {req, res, endWithBuffer} = context;
@@ -47,7 +91,7 @@ const queryRecorder = (next) => async (match, context) => {
         endWithBuffer(body, code, headers);
         return true;
     }
-    let buffer = [];
+    const buffer = [];
     res.on("pipe", (src) => {
         src.on('error', (err) => {
             console.error(err);
@@ -60,7 +104,7 @@ const queryRecorder = (next) => async (match, context) => {
                 headers:res.getHeaders(),
                 body
             });
-            console.log(url.bgYellow + "=[" + body.toString().grey + "]");
+            console.log(body);
         });
     });
 
