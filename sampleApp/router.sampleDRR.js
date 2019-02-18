@@ -1,91 +1,18 @@
 //=====================
 //演示使用本地内存缓存代理服务数据
 //=====================
+const path = require("path");
 
 const Handler = require("../src/handler");
 const proxy = require("../src/processor/proxyProcessor");
-const {checksumBuffer} = require("../src/util/hash");
-
+const {DiskCache} = require("../src/util/cache");
 const sampleApp = new Handler(/([\s|\S]*)/);
 const myProxy = proxy({
     dstHost: "http://httpbin.org",
     dumpResponse:true
 });
-const path = require("path");
 
-const fs = require("fs");
-const {Serializer, Deserializer} = require("../src/util/buffer");
-const mySerializer = Serializer();
-const myDeserializer = Deserializer();
 
-const MemoryCache = () => {
-    let cache = {};
-    return {
-        save: (key, buffer) => {
-            cache[key] = buffer;
-        },
-        find: (key) => {
-            return cache[key];
-        },
-
-        contains: (key) => {
-            return cache.hasOwnProperty(key);
-        },
-        remove: (key) => {
-            delete cache[key];
-        },
-        clear: () => {
-            cache = {}
-        },
-        snapshot: () => {
-            return Object.assign({}, cache);
-        }
-    }
-};
-
-const DiskCache = (destination) => {
-    let cache = {};
-    let snap = path.resolve(destination, `snapshot.json`);
-    if (fs.existsSync(snap)) {
-        const buff = fs.readFileSync(snap);
-        Object.assign(cache, JSON.parse(buff));
-    }
-
-    //TODO init
-    return {
-        save: async (key, {code, headers, body}) => {
-            const buff = mySerializer(code, headers, body);
-            const sum = await checksumBuffer("md5", buff);
-            let tempPath = path.resolve(destination, `${sum}.osm`);
-            if (!fs.existsSync(tempPath)) {
-                fs.writeFileSync(tempPath, buff);
-            }
-            console.log(sum);
-            cache[key] = sum;
-        },
-        find: (key) => {
-            const sum =  cache[key];
-            const tempPath = path.resolve(destination, `${sum}.osm`);
-            const buff = fs.readFileSync(tempPath);
-            return myDeserializer(buff);
-        },
-
-        contains: (key) => {
-            return cache.hasOwnProperty(key);
-        },
-        remove: (key) => {
-            //TODO delete file
-            delete cache[key];
-        },
-        clear: () => {
-            cache = {}
-        },
-        snapshot: () => {
-            const tempPath = path.resolve(destination, `snapshot.json`);
-            fs.writeFileSync(tempPath, Buffer.from(JSON.stringify(cache)));
-        }
-    };
-};
 
 //const myCache = MemoryCache();
 const myCache = DiskCache(path.resolve(__dirname, 'dump'));
