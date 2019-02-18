@@ -23,13 +23,7 @@ const proxy = ({
                     injectHeader(remoteResp.headers, {});
                 }
                 if(dumpResponse) {
-                    const contentType = remoteResp.headers['content-type'];
-                    console.log(contentType);
-                    if (contentType && (contentType.indexOf("text") !== -1 || contentType.indexOf("json") !== -1)) {
-                        dumpStream(remoteResp)
-                    } else {
-                        console.log("data--> ".bgYellow + "[binary data]");
-                    }
+                    dumpStream(remoteResp, remoteResp.headers);
                 }
 
             });

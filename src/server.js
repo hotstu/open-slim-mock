@@ -41,8 +41,8 @@ class SlimServer {
     };
 
     writeHead(res) {
-        return (statusCode = 200,customHeaders = {}) => {
-            res.writeHead(statusCode,this.injectHeader({}, customHeaders));
+        return (statusCode = 200, customHeaders = {}) => {
+            res.writeHead(statusCode, this.injectHeader({}, customHeaders));
         }
     };
 
@@ -77,16 +77,30 @@ class SlimServer {
     }
 
 
-    dumpStream(stream) {
-        let body = [];
-        stream.on('error', (err) => {
-            console.error(err);
-        }).on('data', (chunk) => {
-            body.push(chunk);
-        }).on('end', () => {
-            body = Buffer.concat(body).toString();
-            console.log("data".bgYellow + "=[" + body.grey + "]");
-        });
+    dumpStream(stream, headers) {
+        const contentType = headers['content-type'];
+        const contentEncoding = headers['content-encoding'];
+        const customPolicy = headers['x-proxy-policy'];
+        if (contentType &&
+            (contentType.indexOf("text") !== -1 || contentType.indexOf("json") !== -1) &&
+            customPolicy.indexOf("bypassDump") === -1) {
+            let body = [];
+            stream.on('error', (err) => {
+                console.error(err);
+            }).on('data', (chunk) => {
+                body.push(chunk);
+            }).on('end', () => {
+                //TODO gzipの場合
+                if (contentEncoding && contentEncoding === 'gzip') {
+
+                }
+                body = Buffer.concat(body).toString();
+                console.log("data".bgYellow + "=[" + body.grey + "]");
+            });
+        } else {
+            console.log("data--> ".bgYellow + "[binary data]");
+        }
+
     }
 
     start() {
