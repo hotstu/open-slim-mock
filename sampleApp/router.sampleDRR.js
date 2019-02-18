@@ -44,6 +44,12 @@ const MemoryCache = () => {
 
 const DiskCache = (destination) => {
     let cache = {};
+    let snap = path.resolve(destination, `snapshot.json`);
+    if (fs.existsSync(snap)) {
+        const buff = fs.readFileSync(snap);
+        Object.assign(cache, JSON.parse(buff));
+    }
+
     //TODO init
     return {
         save: async (key, {code, headers, body}) => {
@@ -74,9 +80,10 @@ const DiskCache = (destination) => {
             cache = {}
         },
         snapshot: () => {
-
+            const tempPath = path.resolve(destination, `snapshot.json`);
+            fs.writeFileSync(tempPath, Buffer.from(JSON.stringify(cache)));
         }
-    }
+    };
 };
 
 //const myCache = MemoryCache();
@@ -85,6 +92,11 @@ const myCache = DiskCache(path.resolve(__dirname, 'dump'));
 const queryRecorder = (next) => async (match, context) => {
     const {req, res, endWithBuffer} = context;
     const {url} = req;
+    if ("/dump" === url) {
+        myCache.snapshot();
+        endWithBuffer("dump", 200);
+        return true;
+    }
     if (myCache.contains(url)) {
         console.log("!!!hit cache use cached data instead of fetching remote!!!!");
         const {code, headers, body} = myCache.find(url)||{};
