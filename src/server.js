@@ -133,7 +133,7 @@ class SlimServer {
             }
 
             if (!await this.filter(req, res)) {
-                this.endWithBuffer(res, '{"success": false,"errMsg": "content not found"}', 404)
+                this.endWithBuffer('{"success": false,"errMsg": "content not found"}', 404)
             }
 
         }).listen(this.config.PORT, this.config.HOST);
