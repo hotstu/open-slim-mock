@@ -7,6 +7,7 @@
     },
     "router": [
       "./sampleApp/router.sampleApp.js",
+      "./sampleApp/router.sampleService.js",
       "./sampleApp/router.sampleDRR.js"
     ]
   },

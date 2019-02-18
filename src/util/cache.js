@@ -71,6 +71,7 @@ const DiskCache = (destination) => {
         snapshot: () => {
             const tempPath = path.resolve(destination, `snapshot.json`);
             fs.writeFileSync(tempPath, Buffer.from(JSON.stringify(cache)));
+            return Object.assign({}, cache);
         }
     };
 };

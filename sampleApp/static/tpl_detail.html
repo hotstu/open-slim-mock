@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>详情</title>
+    <style>
+        textarea {
+            width: 100%;
+            height: 250px;
+            padding: 12px 20px;
+            box-sizing: border-box;
+            border: 2px solid #ccc;
+            border-radius: 4px;
+            background-color: #f8f8f8;
+            resize: none;
+        }
+
+        input[type=button], input[type=submit], input[type=reset] {
+            background-color: #4CAF50;
+            border: none;
+            color: white;
+            padding: 16px 32px;
+            text-decoration: none;
+            margin: 4px 2px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+
+<div class="content">
+    <form  action="/service/detail" method="post">
+        <textarea name="headers" id="headers" cols="30" rows="10" title="headers">
+
+        </textarea>
+        <textarea name="body" id="body" cols="30" rows="10" title="内容">
+        </textarea>
+        <input type="submit" title="保存">
+    </form>
+</div>
+<script>
+    function getQueryVariable(variable)
+    {
+        var query = window.location.search.substring(1);
+        var vars = query.split("&");
+        for (var i=0;i<vars.length;i++) {
+            var pair = vars[i].split("=");
+            if(pair[0] == variable){return pair[1];}
+        }
+    }
+    let $ = document.querySelector.bind(document);
+    let queryVariable = getQueryVariable("q");
+    if (queryVariable) {
+        fetch(`/service/detail/${queryVariable}`).then((ret) => {
+            return ret.json();
+        }).then((ret) => {
+            const {headers, body} = ret;
+            $("#headers").innerHTML = JSON.stringify(headers);
+            $("#body").innerHTML = body;
+        });
+    }
+
+
+
+</script>
+</body>
+</html>

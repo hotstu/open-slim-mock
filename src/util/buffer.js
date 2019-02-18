@@ -21,7 +21,7 @@ const Deserializer = () => (buff) => {
     let offset = 0;
     const buffer = Buffer.from(buff);
     const magic = buffer.slice(0, 4).toString();
-    console.log(`magic=${magic}`);
+    //console.log(`magic=${magic}`);
     offset += 4;
     const version = buffer.slice(offset, offset + 1).readInt8(0);
     //console.log(`version=${version}`);

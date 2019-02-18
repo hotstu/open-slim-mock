@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>浏览历史</title>
+</head>
+<body>
+
+<div class="content">
+    loading
+</div>
+<script>
+    fetch("/service/list").then((ret) => {
+        return ret.json();
+    }).then((ret) => {
+        let list = ret;
+
+        let $ = document.querySelector.bind(document);
+        $(".content").innerHTML = "<div>hello,wrold</div>";
+        let html = "<ul>"
+        let ts = list.map((item) => {
+            return `<li><a href='/service/view?q=${encodeURIComponent(item)}'>${item}</a></li>`
+        }).concat();
+        html += ts;
+        html += "</ul>"
+        $(".content").innerHTML = html;
+    })
+
+
+</script>
+</body>
+</html>
