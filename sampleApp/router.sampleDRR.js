@@ -8,7 +8,8 @@ const {checksumBuffer} = require("../src/util/hash");
 
 const sampleApp = new Handler(/([\s|\S]*)/);
 const myProxy = proxy({
-    dstHost: "http://httpbin.org"
+    dstHost: "http://httpbin.org",
+    dumpResponse:true
 });
 const path = require("path");
 
@@ -116,7 +117,7 @@ const queryRecorder = (next) => async (match, context) => {
                 headers:res.getHeaders(),
                 body
             });
-            console.log(body);
+            //console.log(body);
         });
     });
 

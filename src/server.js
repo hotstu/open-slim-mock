@@ -1,5 +1,6 @@
 const http = require('http');
 require("colors");
+const zlib = require('zlib');
 const commonHeaders = {
     'Powered-By': 'openSlimMock@hglf',
     'Content-Type': 'application/json; charset=utf-8',
@@ -79,23 +80,33 @@ class SlimServer {
 
     dumpStream(stream, headers) {
         const contentType = headers['content-type'];
-        const contentEncoding = headers['content-encoding'];
+        const encoding = headers['content-encoding'];
         const customPolicy = headers['x-proxy-policy'];
         if (contentType &&
             (contentType.indexOf("text") !== -1 || contentType.indexOf("json") !== -1) &&
-            customPolicy.indexOf("bypassDump") === -1) {
-            let body = [];
+            (!customPolicy ||customPolicy.indexOf("bypassDump") === -1)) {
+            let buff = [];
             stream.on('error', (err) => {
                 console.error(err);
             }).on('data', (chunk) => {
-                body.push(chunk);
+                buff.push(chunk);
             }).on('end', () => {
-                //TODO gzipの場合
-                if (contentEncoding && contentEncoding === 'gzip') {
-
+                const callback = (err, ret) => {
+                    console.log("data".bgYellow + "=[" + ret.grey + "]");
+                };
+                const body = Buffer.concat(buff);
+                if (encoding === 'gzip') {
+                    zlib.gunzip(body, function (err, decoded) {
+                        callback(err, decoded && decoded.toString());
+                    });
+                } else if (encoding === 'deflate') {
+                    zlib.inflate(body, function (err, decoded) {
+                        callback(err, decoded && decoded.toString());
+                    })
+                } else {
+                    callback(null, body.toString());
                 }
-                body = Buffer.concat(body).toString();
-                console.log("data".bgYellow + "=[" + body.grey + "]");
+
             });
         } else {
             console.log("data--> ".bgYellow + "[binary data]");

@@ -3,7 +3,7 @@ const Serializer = () => (code, headers, body) => {
     const magicCode = "!osm";
     const version = 1;
     const buf1 = Buffer.from(magicCode);
-    console.log(buf1.length);
+    //console.log(buf1.length);
 
     const buf2 = Buffer.alloc(1);
     buf2.writeInt8(version, 0);
