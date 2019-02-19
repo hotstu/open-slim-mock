@@ -29,7 +29,7 @@
 <body>
 
 <div class="content">
-    <form  action="/service/detail" method="post">
+    <form id="form" action="/service/detail" method="post">
         <textarea name="headers" id="headers" cols="30" rows="10" title="headers">
 
         </textarea>
@@ -51,12 +51,14 @@
     let $ = document.querySelector.bind(document);
     let queryVariable = getQueryVariable("q");
     if (queryVariable) {
+
         fetch(`/service/detail/${queryVariable}`).then((ret) => {
             return ret.json();
         }).then((ret) => {
             const {headers, body} = ret;
             $("#headers").innerHTML = JSON.stringify(headers);
             $("#body").innerHTML = body;
+            $("#form").setAttribute("action", `/service/detail/${queryVariable}`)
         });
     }
 

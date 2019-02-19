@@ -3,6 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <title>浏览历史</title>
+    <style>
+        li {
+            padding: 10px 10px;
+        }
+        li:nth-child(odd) {
+            background-color: #cccccc;
+        }
+    </style>
 </head>
 <body>
 
@@ -16,11 +24,10 @@
         let list = ret;
 
         let $ = document.querySelector.bind(document);
-        $(".content").innerHTML = "<div>hello,wrold</div>";
         let html = "<ul>"
         let ts = list.map((item) => {
             return `<li><a href='/service/view?q=${encodeURIComponent(item)}'>${item}</a></li>`
-        }).concat();
+        }).join("");
         html += ts;
         html += "</ul>"
         $(".content").innerHTML = html;
