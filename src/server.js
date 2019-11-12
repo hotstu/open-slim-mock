@@ -5,6 +5,7 @@ const commonHeaders = {
     'Powered-By': 'openSlimMock@hglf',
     'Content-Type': 'application/json; charset=utf-8',
     'Access-Control-Allow-Origin': '*',
+    'Access-Control-Allow-Credentials': 'true',
     "Access-Control-Allow-Methods": "POST, GET,PUT, DELETE, OPTIONS, HEAD'",
     "Access-Control-Max-Age": "3600",
     "Access-Control-Allow-Headers": "Content-Type, Access-Control-Allow-Headers, Authorization, X-Requested-With"
@@ -32,23 +33,27 @@ class SlimServer {
     }
 
 
-    endWithBuffer(res) {
+    endWithBuffer(res, req) {
         return (content, statusCode = 200, customHeaders = {}) => {
-            res.writeHead(statusCode, this.injectHeader({}, customHeaders));
+            res.writeHead(statusCode, this.injectHeader({}, customHeaders, req));
             //console.log(content);
             res.end(content)
         }
 
     };
 
-    writeHead(res) {
+    writeHead(res, req) {
         return (statusCode = 200, customHeaders = {}) => {
-            res.writeHead(statusCode, this.injectHeader({}, customHeaders));
+            res.writeHead(statusCode, this.injectHeader({}, customHeaders, req));
         }
     };
 
-    injectHeader(origin, customHeaders = {}) {
-        return Object.assign(origin, commonHeaders, customHeaders);
+    injectHeader(origin, customHeaders = {}, req) {
+        const allowOrigin = {};
+        if(req && req.headers["origin"]) {
+            allowOrigin["Access-Control-Allow-Origin"] = req.headers["origin"]
+        }
+        return Object.assign(origin, commonHeaders, allowOrigin, customHeaders);
     }
 
     async filter(req, res) {
@@ -59,9 +64,9 @@ class SlimServer {
             config: this.config,
             req: req,
             res: res,
-            endWithText: this.endWithBuffer(res),
-            endWithBuffer: this.endWithBuffer(res),
-            writeHead: this.writeHead(res),
+            endWithText: this.endWithBuffer(res, req),
+            endWithBuffer: this.endWithBuffer(res, req),
+            writeHead: this.writeHead(res, req),
             dumpStream: this.dumpStream,
             injectHeader: this.injectHeader
         };
@@ -127,7 +132,8 @@ class SlimServer {
                 console.log(method.green, `${url} finish in ${cost} ms`);
             });
             if (method === "OPTIONS") {
-                this.writeHead(res, 200);
+                res.writeHead(200, commonHeaders)
+                //this.writeHead(res, 200, commonHeaders);
                 res.end();
                 return;
             }

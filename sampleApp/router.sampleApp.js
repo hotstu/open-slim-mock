@@ -34,6 +34,9 @@ sampleApp.registerHandler(/\/sample\/6/, dumpPostProcessor(latencyProcessor(json
 }), () => Math.random() * 5000)));
 //测试静态文件
 sampleApp.registerHandler(/\/sample\/7\/([\s|\S]*)/, binaryProcessor);
-sampleApp.registerHandler(/\/sample\/8/, binaryFileProcessor('sampleApp/static/3.webp'));
+sampleApp.registerHandler(/\/sample\/widget\??([\s|\S]*)/, binaryFileProcessor('sampleApp/static/widget.zip'));
+sampleApp.registerHandler(/\/sample\/info\??([\s|\S]*)/, binaryFileProcessor('sampleApp/static/install.json'));
 sampleApp.registerHandler(/\/sample\/9/, directoryProcessor('sample.json'));
+sampleApp.registerHandler(/\/sample\/ok/, directoryProcessor('ok.json'));
+sampleApp.registerHandler(/\/sample\/points/, directoryProcessor('points.json'));
 module.exports = sampleApp;

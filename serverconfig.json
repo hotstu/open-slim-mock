@@ -2,20 +2,12 @@
   "server": {
     "config": {
       "PORT": 8082,
-      "HOST": "127.0.0.1",
+      "HOST": "0.0.0.0",
       "dumpPost": true
     },
     "router": [
       "./sampleApp/router.sampleApp.js",
-      "./sampleApp/router.sampleService.js",
-      "./sampleApp/router.sampleDRR.js"
+      "./sampleApp/router.sampleProxy.js"
     ]
-  },
-  "proxy": {
-    "port": 8080,
-    "dumpPost": true,
-    "dumpResponse": true,
-    "injectRespHeader": true,
-    "dstHost": "http://httpbin.org"
   }
 }
