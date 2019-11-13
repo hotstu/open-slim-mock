@@ -6,11 +6,11 @@ const binaryFileProcessor = require("../src/processor/staticFileProcessor");
 
 const jsonProcessor = require("../src/processor/jsonProcessor");
 const latencyProcessor = require("../src/processor/latencyProcessor");
-const dumpPostProcessor = require("../src/processor/stringProcessor");
-const stringProcessor = require("../src/processor/dumpPostProcessor");
+const stringProcessor = require("../src/processor/stringProcessor");
+const dumpPostProcessor = require("../src/processor/dumpPostProcessor");
 const directoryProcessor = require("../src/processor/directoryProcessor")(path.resolve(__dirname, 'dataSource'));
 
-const sampleApp = new Handler(/^\/sample\/([\s|\S]*)/);
+const sampleApp = new Handler(/^\/api\/([\s|\S]*)/);
 //测试文件做数据源输出
 sampleApp.registerHandler(/\/sample\/1/, fileProcessor(path.resolve(__dirname, 'dataSource/sample.json')));
 sampleApp.registerHandler(/\/sample\/2/, fileProcessor(path.resolve(__dirname, 'dataSource/sample.html')));
@@ -39,4 +39,5 @@ sampleApp.registerHandler(/\/sample\/info\??([\s|\S]*)/, binaryFileProcessor('sa
 sampleApp.registerHandler(/\/sample\/9/, directoryProcessor('sample.json'));
 sampleApp.registerHandler(/\/sample\/ok/, directoryProcessor('ok.json'));
 sampleApp.registerHandler(/\/sample\/points/, directoryProcessor('points.json'));
+sampleApp.registerHandler(/\/api\/demondlist/, dumpPostProcessor(directoryProcessor('demondlist.json')));
 module.exports = sampleApp;

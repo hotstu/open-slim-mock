@@ -88,8 +88,8 @@ class SlimServer {
         const encoding = headers['content-encoding'];
         const customPolicy = headers['x-proxy-policy'];
         if (contentType &&
-            (contentType.indexOf("text") !== -1 || contentType.indexOf("json") !== -1) &&
-            (!customPolicy ||customPolicy.indexOf("bypassDump") === -1)) {
+            (contentType.indexOf("text") !== -1 || contentType.indexOf("json") !== -1||contentType.indexOf("urlencoded") !== -1)
+            && (!customPolicy ||customPolicy.indexOf("bypassDump") === -1)) {
             let buff = [];
             stream.on('error', (err) => {
                 console.error(err);
