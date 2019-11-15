@@ -8,7 +8,7 @@ const commonHeaders = {
     'Access-Control-Allow-Credentials': 'true',
     "Access-Control-Allow-Methods": "POST, GET,PUT, DELETE, OPTIONS, HEAD'",
     "Access-Control-Max-Age": "3600",
-    "Access-Control-Allow-Headers": "Content-Type, Access-Control-Allow-Headers, Authorization, X-Requested-With"
+    "Access-Control-Allow-Headers": "Content-Type, Access-Control-Allow-Headers, Authorization, X-Requested-With, X-Xsrf-Token"
 };
 
 const fallbackRouter = require("./router/router.fallback");
@@ -50,6 +50,7 @@ class SlimServer {
 
     injectHeader(origin, customHeaders = {}, req) {
         const allowOrigin = {};
+        //console.log(JSON.stringify(req.headers))
         if(req && req.headers["origin"]) {
             allowOrigin["Access-Control-Allow-Origin"] = req.headers["origin"]
         }
@@ -132,8 +133,9 @@ class SlimServer {
                 console.log(method.green, `${url} finish in ${cost} ms`);
             });
             if (method === "OPTIONS") {
-                res.writeHead(200, commonHeaders)
-                //this.writeHead(res, 200, commonHeaders);
+                let header = this.injectHeader({},{}, req);
+                //console.log(JSON.stringify(header))
+                res.writeHead(200,  header);
                 res.end();
                 return;
             }
