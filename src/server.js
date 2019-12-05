@@ -3,7 +3,6 @@ require("colors");
 const zlib = require('zlib');
 const commonHeaders = {
     'Powered-By': 'openSlimMock@hglf',
-    'Content-Type': 'application/json; charset=utf-8',
     'Access-Control-Allow-Origin': '*',
     'Access-Control-Allow-Credentials': 'true',
     "Access-Control-Allow-Methods": "POST, GET,PUT, DELETE, OPTIONS, HEAD'",
@@ -147,9 +146,9 @@ class SlimServer {
         }).listen(this.config.PORT, this.config.HOST);
         console.error([
             ' dPYb     8888P  88888  8    8   dP0b  0     0 p     d',
-            'dP   Yb   8    P 8      8 0  8   C     0     0 0b   dY'      ,
-            'Yb   dP   8888b  88888  8  0 8    Y0b  0     0 0d  b d'    ,
-            'Y    P    8      8      8   08       D 0     0 0 d b d ',
+            'dP   Yb   8    P 8      8 0  8   C     0     0 0b   dY',
+            'Yb   dP   8888b  88888  8  0 8    Y0b  0     0 0d  b d',
+            'Y    P    8      8      8   08       D 0     0 0 d b d',
             'YbodP     8      88888  8    8   qwwb  Y999  0 d  Y  d'
         ].join('\n'))
         console.warn([
@@ -173,7 +172,7 @@ class SlimServer {
             "                   `=---='",
             '^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^',
             '         佛祖保佑       永无BUG'
-        ].join('\n'))
+        ].join('\n'));
         console.log(`open-slim-mock server listening at ${this.config.HOST}:${this.config.PORT}, only use in test purpose`)
 
 

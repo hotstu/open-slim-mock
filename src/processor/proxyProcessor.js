@@ -20,7 +20,15 @@ const proxy = ({
             const remote = request(`${dstHost}${url}`);
             remote.on("response", (remoteResp) => {
                 if (injectRespHeader) {
-                    injectHeader(remoteResp.headers, {}, req);
+                    let customheader;
+                    if (typeof injectRespHeader === 'object') {
+                        customheader = Object.assign({}, injectRespHeader);
+                    } else {
+                        customheader = {}
+                    }
+
+
+                    injectHeader(remoteResp.headers, customheader, req);
                 }
                 if(dumpResponse) {
                     dumpStream(remoteResp, remoteResp.headers);
